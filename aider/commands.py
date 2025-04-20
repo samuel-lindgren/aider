@@ -51,6 +51,7 @@ class Commands:
 
     def __init__(
         self,
+        summarizer,
         io,
         coder,
         voice_language=None,
@@ -64,6 +65,7 @@ class Commands:
         original_read_only_fnames=None,
     ):
         self.io = io
+        self.summarizer = summarizer
         self.coder = coder
         self.parser = parser
         self.args = args
@@ -879,6 +881,10 @@ class Commands:
         all_files = files + read_only_files
         all_files = [self.quote_fname(fn) for fn in all_files]
         return all_files
+
+	def cmd_compact(self, args=""):
+    	"Summarize history to free up context space"
+    	self.summarizer.summarize()
 
     def cmd_drop(self, args=""):
         "Remove files from the chat session to free up context space"

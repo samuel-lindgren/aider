@@ -918,8 +918,14 @@ def main(argv=None, input=None, output=None, force_git_root=None, return_coder=F
     else:
         analytics.event("no-repo")
 
+    summarizer = ChatSummary(
+        [main_model.weak_model, main_model],
+        args.max_chat_history_tokens or main_model.max_chat_history_tokens,
+    )
+
     commands = Commands(
         io,
+        summarizer,
         None,
         voice_language=args.voice_language,
         voice_input_device=args.voice_input_device,
@@ -930,11 +936,6 @@ def main(argv=None, input=None, output=None, force_git_root=None, return_coder=F
         verbose=args.verbose,
         editor=args.editor,
         original_read_only_fnames=read_only_fnames,
-    )
-
-    summarizer = ChatSummary(
-        [main_model.weak_model, main_model],
-        args.max_chat_history_tokens or main_model.max_chat_history_tokens,
     )
 
     if args.cache_prompts and args.map_refresh == "auto":
